@@ -76,7 +76,7 @@ export function AcidCalculator() {
                         id="acidChain"
                         fullWidth
                         type="text"
-                        label="Chaîne d'acides aminés"
+                        label="Séquence"
                         multiline
                         rows={16}
                         error={Boolean(errors.acidChain)}
