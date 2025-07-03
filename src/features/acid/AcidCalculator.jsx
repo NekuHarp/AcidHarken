@@ -1,17 +1,25 @@
 import {
     Box,
     Button,
+    Card,
     Divider,
+    Grid,
     Stack,
     TextField,
     Typography,
 } from "@mui/material";
-
+import { useForm, useWatch } from "react-hook-form";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import { ACID_COLLECTION, INPUT_VALIDATION } from "../../constants";
 
 export function AcidCalculator() {
-    const { control, setValue, register } = useForm({
+    const {
+        control,
+        setValue,
+        handleSubmit,
+        register,
+        formState: { errors },
+    } = useForm({
         defaultValues: {
             acidChain: "",
             percents: [],
@@ -51,61 +59,85 @@ export function AcidCalculator() {
             });
         });
 
-        if (protocolResults) {
-            setValue("percents", values);
-            setValue("finalResult", finalValue);
-        }
+        setValue("percents", values);
+        setValue("finalResult", finalValue.toFixed(3));
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid container spacing={5}>
-                <Grid item xs={4}>
-                    <Stack spacing={2} sx={{ p: 2 }}>
-                        <Box>
-                            <Typography variant="h5">Input</Typography>
-                            <Divider />
-                        </Box>
+            <Stack direction={"row"} spacing={1} justifyContent="space-around">
+                <Stack spacing={1} sx={{ p: 2 }} alignItems="stretch">
+                    <Box>
+                        <Typography variant="h5">Input</Typography>
+                        <Divider />
+                    </Box>
 
-                        <TextField
-                            id="acidChain"
-                            fullWidth
-                            label="Chaîne d'acides aminés"
-                            error={Boolean(errors.acidChain)}
-                            helperText={errors.acidChain?.message}
-                            {...register("acidChain", {
-                                required: INPUT_VALIDATION.REQUIRED,
-                            })}
-                        />
+                    <TextField
+                        id="acidChain"
+                        fullWidth
+                        type="text"
+                        label="Chaîne d'acides aminés"
+                        multiline
+                        rows={16}
+                        error={Boolean(errors.acidChain)}
+                        helperText={errors.acidChain?.message}
+                        {...register("acidChain", {
+                            required: INPUT_VALIDATION.REQUIRED,
+                        })}
+                    />
 
-                        <Stack direction="row" justifyContent="flex-end">
-                            <Button
-                                variant="contained"
-                                startIcon={<CalculateIcon />}
-                                type="submit"
-                            >
-                                Calcul
-                            </Button>
-                        </Stack>
+                    <Stack direction="row" justifyContent="flex-end">
+                        <Button
+                            variant="contained"
+                            startIcon={<CalculateIcon />}
+                            type="submit"
+                        >
+                            Calcul
+                        </Button>
                     </Stack>
-                </Grid>
-                <Grid item xs={4}>
-                    <Stack spacing={2} sx={{ p: 2 }}>
-                        <Box>
-                            <Typography variant="h5">Output</Typography>
-                            <Divider />
-                        </Box>
+                </Stack>
+                <Stack spacing={1} sx={{ p: 2 }}>
+                    <Box>
+                        <Typography variant="h5">Output</Typography>
+                        <Divider />
+                    </Box>
 
-                        <Stack direction="row" justifyContent="space-between">
+                    <Stack justifyContent="space-between">
+                        <Card>
                             <Typography>Indice de réfraction</Typography>
 
                             <Typography>
                                 {finalResultWatch ? finalResultWatch : "-"}
                             </Typography>
-                        </Stack>
+                        </Card>
                     </Stack>
-                </Grid>
-            </Grid>
+
+                    <Box>
+                        <Typography variant="h5">Details</Typography>
+                        <Divider />
+                    </Box>
+
+                    <Grid container justifyContent="center" spacing={1}>
+                        {percentsWatch.map((percent) => {
+                            return (
+                                <Grid size={3} key={percent.key}>
+                                    <Card>
+                                        <Typography>{percent.label}</Typography>
+
+                                        <Typography>
+                                            {percent.percent
+                                                ? `${(
+                                                      percent.percent * 100
+                                                  ).toFixed(2)}%`
+                                                : "-"}
+                                        </Typography>
+                                    </Card>
+                                </Grid>
+                            );
+                        })}
+                    </Grid>
+                </Stack>
+            </Stack>
         </form>
     );
 }
