@@ -41,7 +41,7 @@ export function AcidCalculator() {
 
         [...payload.acidChain].forEach((character) => {
             const acid = allLetters.find(
-                (letter) => letter.toUpperCase() === character.toUpperCase()
+                (letter) => letter.toUpperCase() === character.toUpperCase(),
             );
             if (acid) {
                 total++;
@@ -64,80 +64,108 @@ export function AcidCalculator() {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack direction={"row"} spacing={1} justifyContent="space-around">
-                <Stack spacing={1} sx={{ p: 2 }} alignItems="stretch">
-                    <Box>
-                        <Typography variant="h5">Input</Typography>
-                        <Divider />
-                    </Box>
+        <Box sx={{ width: "100%" }}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <Stack direction={"row"} spacing={1} sx={{ width: "100%" }}>
+                    <Stack
+                        spacing={1}
+                        sx={{ p: 2, flex: 1, minWidth: 200 }}
+                        alignItems="stretch"
+                    >
+                        <Box>
+                            <Typography variant="h5">Input</Typography>
+                            <Divider />
+                        </Box>
 
-                    <TextField
-                        id="acidChain"
-                        fullWidth
-                        type="text"
-                        label="Séquence"
-                        multiline
-                        rows={16}
-                        error={Boolean(errors.acidChain)}
-                        helperText={errors.acidChain?.message}
-                        {...register("acidChain", {
-                            required: INPUT_VALIDATION.REQUIRED,
-                        })}
+                        <TextField
+                            id="acidChain"
+                            fullWidth
+                            type="text"
+                            label="Séquence"
+                            multiline
+                            rows={16}
+                            error={Boolean(errors.acidChain)}
+                            helperText={errors.acidChain?.message}
+                            {...register("acidChain", {
+                                required: INPUT_VALIDATION.REQUIRED,
+                            })}
+                        />
+
+                        <Stack direction="row" justifyContent="flex-end">
+                            <Button
+                                variant="contained"
+                                startIcon={<CalculateIcon />}
+                                type="submit"
+                            >
+                                Calcul
+                            </Button>
+                        </Stack>
+                    </Stack>
+                    <Divider
+                        orientation="vertical"
+                        flexItem
+                        sx={{ borderRightWidth: 3 }}
                     />
+                    <Stack spacing={1} sx={{ p: 2, flex: 2 }}>
+                        <Box>
+                            <Typography variant="h5">Output</Typography>
+                            <Divider />
+                        </Box>
 
-                    <Stack direction="row" justifyContent="flex-end">
-                        <Button
-                            variant="contained"
-                            startIcon={<CalculateIcon />}
-                            type="submit"
-                        >
-                            Calcul
-                        </Button>
+                        <Stack justifyContent="space-between" alignItems="center">
+                            <Card sx={{ minHeight: 64, width: 300 }}>
+                                <Typography fontWeight="bold">
+                                    Indice de réfraction
+                                </Typography>
+                                <Typography sx={{ mt: 0.5 }}>
+                                    {finalResultWatch ? finalResultWatch : "-"}
+                                </Typography>
+                            </Card>
+                        </Stack>
+
+                        <Box>
+                            <Typography variant="h5">Details</Typography>
+                            <Divider />
+                        </Box>
+
+                        <Grid container justifyContent="center" spacing={1}>
+                            {Object.entries(ACID_COLLECTION).map(
+                                ([key, acid]) => {
+                                    const found = percentsWatch.find(
+                                        (p) => p.key === key,
+                                    );
+                                    return (
+                                        <Grid size={3} key={key}>
+                                            <Card
+                                                sx={{
+                                                    minHeight: 64,
+                                                    ...(!found && {
+                                                        opacity: 0.4,
+                                                        bgcolor:
+                                                            "action.disabledBackground",
+                                                    }),
+                                                }}
+                                            >
+                                                <Typography fontWeight="bold">
+                                                    {acid.label}
+                                                </Typography>
+                                                <Typography sx={{ mt: 0.5 }}>
+                                                    {found
+                                                        ? `${(
+                                                              found.percent *
+                                                              100
+                                                          ).toFixed(2)}%`
+                                                        : "-"}
+                                                </Typography>
+                                            </Card>
+                                        </Grid>
+                                    );
+                                },
+                            )}
+                        </Grid>
                     </Stack>
                 </Stack>
-                <Stack spacing={1} sx={{ p: 2 }}>
-                    <Box>
-                        <Typography variant="h5">Output</Typography>
-                        <Divider />
-                    </Box>
-
-                    <Stack justifyContent="space-between">
-                        <Card>
-                            <Typography>Indice de réfraction</Typography>
-
-                            <Typography>
-                                {finalResultWatch ? finalResultWatch : "-"}
-                            </Typography>
-                        </Card>
-                    </Stack>
-
-                    <Box>
-                        <Typography variant="h5">Details</Typography>
-                        <Divider />
-                    </Box>
-
-                    <Grid container justifyContent="center" spacing={1}>
-                        {percentsWatch.map((percent) => {
-                            return (
-                                <Grid size={3} key={percent.key}>
-                                    <Card>
-                                        <Typography>{percent.label}</Typography>
-
-                                        <Typography>
-                                            {percent.percent
-                                                ? `${(
-                                                      percent.percent * 100
-                                                  ).toFixed(2)}%`
-                                                : "-"}
-                                        </Typography>
-                                    </Card>
-                                </Grid>
-                            );
-                        })}
-                    </Grid>
-                </Stack>
-            </Stack>
-        </form>
+            </form>
+        </Box>
     );
 }

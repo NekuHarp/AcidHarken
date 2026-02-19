@@ -6,7 +6,9 @@ const Page = forwardRef(({ children }, ref) => (
         ref={ref}
         sx={{
             width: "1",
-            height: "100vh",
+            minHeight: "100vh",
+            display: "flex",
+            flexDirection: "column",
         }}
     >
         {children}
