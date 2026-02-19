@@ -67,23 +67,35 @@ export function AcidCalculator() {
         <Box sx={{ width: "100%" }}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack direction={"row"} spacing={1} sx={{ width: "100%" }}>
-                    <Stack
-                        spacing={1}
-                        sx={{ p: 2, flex: 1, minWidth: 200 }}
-                        alignItems="stretch"
+                    <Box
+                        sx={{
+                            p: 2,
+                            flex: 1,
+                            minWidth: 200,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignSelf: "stretch",
+                            gap: 2,
+                        }}
                     >
-                        <Box>
+                        <Stack spacing={1}>
                             <Typography variant="h5">Input</Typography>
                             <Divider />
-                        </Box>
+                        </Stack>
 
                         <TextField
                             id="acidChain"
                             fullWidth
                             type="text"
-                            label="Séquence"
+                            label="Sequence"
                             multiline
-                            rows={16}
+                            sx={{
+                                flex: 1,
+                                "& .MuiInputBase-root": { height: "100%" },
+                                "& .MuiInputBase-inputMultiline": {
+                                    height: "100% !important",
+                                },
+                            }}
                             error={Boolean(errors.acidChain)}
                             helperText={errors.acidChain?.message}
                             onKeyDown={(e) => {
@@ -97,31 +109,38 @@ export function AcidCalculator() {
                             })}
                         />
 
-                        <Stack direction="row" justifyContent="flex-end">
+                        <Stack
+                            direction="row"
+                            justifyContent="flex-end"
+                            sx={{ marginTop: "auto" }}
+                        >
                             <Button
                                 variant="contained"
                                 startIcon={<CalculateIcon />}
                                 type="submit"
                             >
-                                Calcul
+                                Calculate
                             </Button>
                         </Stack>
-                    </Stack>
+                    </Box>
                     <Divider
                         orientation="vertical"
                         flexItem
                         sx={{ borderRightWidth: 3 }}
                     />
-                    <Stack spacing={1} sx={{ p: 2, flex: 2 }}>
-                        <Box>
+                    <Stack spacing={2} sx={{ p: 2, flex: 2 }}>
+                        <Stack spacing={1}>
                             <Typography variant="h5">Output</Typography>
                             <Divider />
-                        </Box>
+                        </Stack>
 
-                        <Stack justifyContent="space-between" alignItems="center">
+                        <Stack
+                            justifyContent="space-between"
+                            alignItems="center"
+                        >
                             <Card sx={{ minHeight: 64, width: 300 }}>
-                                <Typography fontWeight="bold">
-                                    Indice de réfraction
+                                <Typography fontWeight="bold" sx={{ mt: 1 }}>
+                                    Refractive Index
                                 </Typography>
                                 <Typography sx={{ mt: 0.5 }}>
                                     {finalResultWatch ? finalResultWatch : "-"}
@@ -129,10 +148,10 @@ export function AcidCalculator() {
                             </Card>
                         </Stack>
 
-                        <Box>
+                        <Stack spacing={1} sx={{ mt: 2 }}>
                             <Typography variant="h5">Details</Typography>
                             <Divider />
-                        </Box>
+                        </Stack>
 
                         <Grid container justifyContent="center" spacing={1}>
                             {Object.entries(ACID_COLLECTION).map(
@@ -152,7 +171,10 @@ export function AcidCalculator() {
                                                     }),
                                                 }}
                                             >
-                                                <Typography fontWeight="bold">
+                                                <Typography
+                                                    fontWeight="bold"
+                                                    sx={{ mt: 1 }}
+                                                >
                                                     {acid.label}
                                                 </Typography>
                                                 <Typography sx={{ mt: 0.5 }}>
