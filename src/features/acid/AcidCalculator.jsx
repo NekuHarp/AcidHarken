@@ -86,6 +86,12 @@ export function AcidCalculator() {
                             rows={16}
                             error={Boolean(errors.acidChain)}
                             helperText={errors.acidChain?.message}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                    e.preventDefault();
+                                    handleSubmit(onSubmit)();
+                                }
+                            }}
                             {...register("acidChain", {
                                 required: INPUT_VALIDATION.REQUIRED,
                             })}
