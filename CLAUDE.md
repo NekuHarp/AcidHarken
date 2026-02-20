@@ -15,14 +15,14 @@ AcidHarken is an amino acid composition calculator. Users paste a protein sequen
 
 **Stack:** React 19, Vite 7, MUI 7, Emotion, react-hook-form
 
-**Key structure:**
-- `src/features/acid/AcidCalculator.jsx` — Main calculator component; parses sequences, computes per-residue percentages and weighted refractive index using `ACID_COLLECTION`
-- `src/constants.js` — `ACID_COLLECTION` maps single-letter amino acid codes to labels and refractive index weights; `INPUT_VALIDATION` holds form validation messages
-- `src/theme/` — MUI theme configuration with custom palette, typography, shadows, and seasonal flags (`isSpooky`, `isMerry`)
+**Key files:**
+- `src/features/acid/AcidCalculator.jsx` — Main calculator component; parses sequences, computes per-residue percentages and weighted refractive index using `ACID_COLLECTION`. Notably, react-hook-form is used to store both input (`acidChain`) and computed output (`percents`, `finalResult`) as form state via `setValue`.
+- `src/constants.js` — `ACID_COLLECTION` maps single-letter codes to 3-letter labels and refractive index weights. `INPUT_VALIDATION` exists but most entries are unused in this app; only `REQUIRED` is referenced.
+- `src/theme/index.jsx` — Wraps the app in MUI `ThemeProvider`; exposes `theme.custom.isSpooky` (true on Oct 31) and `theme.custom.isMerry` (true in December) via `src/utils/`.
 - `src/components/Page.jsx` — Full-viewport layout wrapper
 
 ## Code Conventions
 
 - ESLint config enforces: sorted imports (`sort-imports`), no implicit coercion, security plugin, prettier formatting, node plugin
-- Uses 4-space indentation in JSX/JS files
-- UI text is in French (labels like "Séquence", "Calcul", "Indice de réfraction")
+- 4-space indentation in JSX/JS files
+- No test files exist in this project
